@@ -32,7 +32,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { BackgroundMusicView } from "./background-music";
+import { PixabaySoundEffectsView, PixabayMusicView } from "./pixabay-sounds";
 
 export function SoundsView() {
   return (
