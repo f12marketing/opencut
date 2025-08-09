@@ -50,7 +50,7 @@ export function SoundsView() {
           value="sound-effects"
           className="p-5 pt-0 mt-0 flex-1 flex flex-col min-h-0"
         >
-          <SoundEffectsView />
+          <PixabaySoundEffectsView />
         </TabsContent>
         <TabsContent
           value="saved"
