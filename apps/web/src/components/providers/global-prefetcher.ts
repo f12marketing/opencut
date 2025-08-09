@@ -32,11 +32,23 @@ export function useGlobalPrefetcher() {
         );
 
         if (!ignore) {
+          const data = await response.json();
+
+          // Handle case where API is not configured (returns empty results with error message)
+          if (data.error && data.count === 0) {
+            console.warn("Freesound API not configured, sounds functionality disabled");
+            setTopSoundEffects([]);
+            setHasLoaded(true);
+            setCurrentPage(1);
+            setHasNextPage(false);
+            setTotalCount(0);
+            return;
+          }
+
           if (!response.ok) {
             throw new Error(`Failed to fetch: ${response.status}`);
           }
 
-          const data = await response.json();
           setTopSoundEffects(data.results);
           setHasLoaded(true);
 
