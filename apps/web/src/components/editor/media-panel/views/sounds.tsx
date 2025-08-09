@@ -41,7 +41,7 @@ export function SoundsView() {
         <div className="px-3 pt-4 pb-0">
           <TabsList>
             <TabsTrigger value="sound-effects">Sound effects</TabsTrigger>
-            <TabsTrigger value="songs">Songs</TabsTrigger>
+            <TabsTrigger value="songs">Background Music</TabsTrigger>
             <TabsTrigger value="saved">Saved</TabsTrigger>
           </TabsList>
         </div>
