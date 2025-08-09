@@ -288,183 +288,204 @@ export function MediaView() {
         onChange={handleFileChange}
       />
 
-      <div
-        className={`h-full flex flex-col gap-1 transition-colors relative ${isDragOver ? "bg-accent/30" : ""}`}
-        {...dragProps}
-      >
-        <div className="p-3 pb-2 bg-panel">
-          {/* Search and filter controls */}
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={handleFileSelect}
-              disabled={isProcessing}
-              className="!bg-background px-4 flex-1 justify-center items-center h-9 opacity-100 hover:opacity-75 transition-opacity"
-            >
-              {isProcessing ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <CloudUpload className="h-4 w-4" />
-              )}
-              <span>Upload</span>
-            </Button>
-            <div className="flex items-center gap-0">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      size="icon"
-                      variant="text"
-                      onClick={() =>
-                        setMediaViewMode(
-                          mediaViewMode === "grid" ? "list" : "grid"
-                        )
-                      }
-                      disabled={isProcessing}
-                      className="justify-center items-center"
-                    >
-                      {mediaViewMode === "grid" ? (
-                        <List strokeWidth={1.5} className="!size-[1.05rem]" />
-                      ) : (
-                        <Grid2X2
-                          strokeWidth={1.5}
-                          className="!size-[1.05rem]"
-                        />
-                      )}
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>
-                      {mediaViewMode === "grid"
-                        ? "Switch to list view"
-                        : "Switch to grid view"}
-                    </p>
-                  </TooltipContent>
-                  <Tooltip>
-                    <DropdownMenu>
+      <Tabs defaultValue="uploads" className="h-full flex flex-col">
+        <div className="p-3 pb-2 bg-panel border-b border-border">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="uploads" className="flex items-center gap-2">
+              <Upload className="h-4 w-4" />
+              <span>Uploads</span>
+            </TabsTrigger>
+            <TabsTrigger value="videos" className="flex items-center gap-2">
+              <Globe className="h-4 w-4" />
+              <span>Videos</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
+
+        <TabsContent value="uploads" className="flex-1 mt-0">
+          <div
+            className={`h-full flex flex-col gap-1 transition-colors relative ${isDragOver ? "bg-accent/30" : ""}`}
+            {...dragProps}
+          >
+            <div className="p-3 pb-2 bg-panel">
+              {/* Search and filter controls */}
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={handleFileSelect}
+                  disabled={isProcessing}
+                  className="!bg-background px-4 flex-1 justify-center items-center h-9 opacity-100 hover:opacity-75 transition-opacity"
+                >
+                  {isProcessing ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <CloudUpload className="h-4 w-4" />
+                  )}
+                  <span>Upload</span>
+                </Button>
+                <div className="flex items-center gap-0">
+                  <TooltipProvider>
+                    <Tooltip>
                       <TooltipTrigger asChild>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            size="icon"
-                            variant="text"
-                            disabled={isProcessing}
-                            className="justify-center items-center"
-                          >
-                            <ArrowDown01
+                        <Button
+                          size="icon"
+                          variant="text"
+                          onClick={() =>
+                            setMediaViewMode(
+                              mediaViewMode === "grid" ? "list" : "grid"
+                            )
+                          }
+                          disabled={isProcessing}
+                          className="justify-center items-center"
+                        >
+                          {mediaViewMode === "grid" ? (
+                            <List strokeWidth={1.5} className="!size-[1.05rem]" />
+                          ) : (
+                            <Grid2X2
                               strokeWidth={1.5}
                               className="!size-[1.05rem]"
                             />
-                          </Button>
-                        </DropdownMenuTrigger>
+                          )}
+                        </Button>
                       </TooltipTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                          onClick={() => {
-                            if (sortBy === "name") {
-                              setSortOrder(
-                                sortOrder === "asc" ? "desc" : "asc"
-                              );
-                            } else {
-                              setSortBy("name");
-                              setSortOrder("asc");
-                            }
-                          }}
-                        >
-                          Name{" "}
-                          {sortBy === "name" &&
-                            (sortOrder === "asc" ? "↑" : "↓")}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => {
-                            if (sortBy === "type") {
-                              setSortOrder(
-                                sortOrder === "asc" ? "desc" : "asc"
-                              );
-                            } else {
-                              setSortBy("type");
-                              setSortOrder("asc");
-                            }
-                          }}
-                        >
-                          Type{" "}
-                          {sortBy === "type" &&
-                            (sortOrder === "asc" ? "↑" : "↓")}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => {
-                            if (sortBy === "duration") {
-                              setSortOrder(
-                                sortOrder === "asc" ? "desc" : "asc"
-                              );
-                            } else {
-                              setSortBy("duration");
-                              setSortOrder("asc");
-                            }
-                          }}
-                        >
-                          Duration{" "}
-                          {sortBy === "duration" &&
-                            (sortOrder === "asc" ? "↑" : "↓")}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => {
-                            if (sortBy === "size") {
-                              setSortOrder(
-                                sortOrder === "asc" ? "desc" : "asc"
-                              );
-                            } else {
-                              setSortBy("size");
-                              setSortOrder("asc");
-                            }
-                          }}
-                        >
-                          File Size{" "}
-                          {sortBy === "size" &&
-                            (sortOrder === "asc" ? "↑" : "↓")}
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                    <TooltipContent>
-                      <p>
-                        Sort by {sortBy} (
-                        {sortOrder === "asc" ? "ascending" : "descending"})
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                </Tooltip>
-              </TooltipProvider>
+                      <TooltipContent>
+                        <p>
+                          {mediaViewMode === "grid"
+                            ? "Switch to list view"
+                            : "Switch to grid view"}
+                        </p>
+                      </TooltipContent>
+                      <Tooltip>
+                        <DropdownMenu>
+                          <TooltipTrigger asChild>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                size="icon"
+                                variant="text"
+                                disabled={isProcessing}
+                                className="justify-center items-center"
+                              >
+                                <ArrowDown01
+                                  strokeWidth={1.5}
+                                  className="!size-[1.05rem]"
+                                />
+                              </Button>
+                            </DropdownMenuTrigger>
+                          </TooltipTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                              onClick={() => {
+                                if (sortBy === "name") {
+                                  setSortOrder(
+                                    sortOrder === "asc" ? "desc" : "asc"
+                                  );
+                                } else {
+                                  setSortBy("name");
+                                  setSortOrder("asc");
+                                }
+                              }}
+                            >
+                              Name{" "}
+                              {sortBy === "name" &&
+                                (sortOrder === "asc" ? "↑" : "↓")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => {
+                                if (sortBy === "type") {
+                                  setSortOrder(
+                                    sortOrder === "asc" ? "desc" : "asc"
+                                  );
+                                } else {
+                                  setSortBy("type");
+                                  setSortOrder("asc");
+                                }
+                              }}
+                            >
+                              Type{" "}
+                              {sortBy === "type" &&
+                                (sortOrder === "asc" ? "↑" : "↓")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => {
+                                if (sortBy === "duration") {
+                                  setSortOrder(
+                                    sortOrder === "asc" ? "desc" : "asc"
+                                  );
+                                } else {
+                                  setSortBy("duration");
+                                  setSortOrder("asc");
+                                }
+                              }}
+                            >
+                              Duration{" "}
+                              {sortBy === "duration" &&
+                                (sortOrder === "asc" ? "↑" : "↓")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => {
+                                if (sortBy === "size") {
+                                  setSortOrder(
+                                    sortOrder === "asc" ? "desc" : "asc"
+                                  );
+                                } else {
+                                  setSortBy("size");
+                                  setSortOrder("asc");
+                                }
+                              }}
+                            >
+                              File Size{" "}
+                              {sortBy === "size" &&
+                                (sortOrder === "asc" ? "↑" : "↓")}
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                        <TooltipContent>
+                          <p>
+                            Sort by {sortBy} (
+                            {sortOrder === "asc" ? "ascending" : "descending"})
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </div>
+            </div>
+
+            <div className="h-full w-full overflow-y-auto scrollbar-thin">
+              <div className="flex-1 p-3 pt-0 w-full">
+                {isDragOver || filteredMediaItems.length === 0 ? (
+                  <MediaDragOverlay
+                    isVisible={true}
+                    isProcessing={isProcessing}
+                    progress={progress}
+                    onClick={handleFileSelect}
+                    isEmptyState={filteredMediaItems.length === 0 && !isDragOver}
+                  />
+                ) : mediaViewMode === "grid" ? (
+                  <GridView
+                    filteredMediaItems={filteredMediaItems}
+                    renderPreview={renderPreview}
+                    handleRemove={handleRemove}
+                  />
+                ) : (
+                  <ListView
+                    filteredMediaItems={filteredMediaItems}
+                    renderPreview={renderPreview}
+                    handleRemove={handleRemove}
+                    formatDuration={formatDuration}
+                  />
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        </TabsContent>
 
-        <div className="h-full w-full overflow-y-auto scrollbar-thin">
-          <div className="flex-1 p-3 pt-0 w-full">
-            {isDragOver || filteredMediaItems.length === 0 ? (
-              <MediaDragOverlay
-                isVisible={true}
-                isProcessing={isProcessing}
-                progress={progress}
-                onClick={handleFileSelect}
-                isEmptyState={filteredMediaItems.length === 0 && !isDragOver}
-              />
-            ) : mediaViewMode === "grid" ? (
-              <GridView
-                filteredMediaItems={filteredMediaItems}
-                renderPreview={renderPreview}
-                handleRemove={handleRemove}
-              />
-            ) : (
-              <ListView
-                filteredMediaItems={filteredMediaItems}
-                renderPreview={renderPreview}
-                handleRemove={handleRemove}
-                formatDuration={formatDuration}
-              />
-            )}
-          </div>
-        </div>
-      </div>
+        <TabsContent value="videos" className="flex-1 mt-0">
+          <VideosView />
+        </TabsContent>
+      </Tabs>
     </>
   );
 }
