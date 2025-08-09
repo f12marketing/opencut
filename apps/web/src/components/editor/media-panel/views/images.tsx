@@ -208,7 +208,7 @@ function ImageCard({ image, onClick, onDownload }: ImageCardProps) {
 
   return (
     <div
-      className="group relative bg-card rounded-lg overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary transition-all duration-200"
+      className="group relative rounded-lg overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary transition-all duration-200"
       onClick={onClick}
     >
       {/* Image */}
@@ -226,7 +226,7 @@ function ImageCard({ image, onClick, onDownload }: ImageCardProps) {
           onLoad={() => setIsLoading(false)}
           sizes="(max-width: 768px) 50vw, 25vw"
         />
-        
+
         {/* Hover Overlay */}
         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
           <Button
@@ -237,36 +237,6 @@ function ImageCard({ image, onClick, onDownload }: ImageCardProps) {
           >
             <Download className="h-4 w-4" />
           </Button>
-        </div>
-      </div>
-
-      {/* Image Info */}
-      <div className="p-3 space-y-2">
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <User className="h-3 w-3" />
-          <span className="truncate">{image.user}</span>
-        </div>
-        
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1">
-              <Heart className="h-3 w-3" />
-              <span>{image.likes}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Download className="h-3 w-3" />
-              <span>{image.downloads}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-1">
-          {image.tags.split(", ").slice(0, 2).map((tag) => (
-            <Badge key={tag} variant="secondary" className="text-xs py-0 px-1.5">
-              {tag}
-            </Badge>
-          ))}
         </div>
       </div>
     </div>
