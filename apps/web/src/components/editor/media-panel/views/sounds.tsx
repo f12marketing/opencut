@@ -417,7 +417,7 @@ function SavedSoundsView() {
 }
 
 function SongsView() {
-  return <BackgroundMusicView />;
+  return <PixabayMusicView />;
 }
 
 interface AudioItemProps {
