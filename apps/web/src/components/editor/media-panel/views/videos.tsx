@@ -245,20 +245,9 @@ interface VideoCardProps {
 }
 
 function VideoCard({ video, onClick, onDownload, formatDuration, formatFileSize }: VideoCardProps) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [thumbnailUrl, setThumbnailUrl] = useState<string>('');
-
-  useEffect(() => {
-    // Generate thumbnail URL from video URL
-    // Pixabay videos don't provide direct thumbnails, so we'll use a placeholder approach
-    // In a real implementation, you might want to use a video thumbnail service
-    const videoUrl = video.videos.small.url;
-    setThumbnailUrl(`https://i.vimeocdn.com/video/default_300x225.jpg`);
-  }, [video]);
-
   return (
     <div
-      className="group relative bg-card rounded-lg overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary transition-all duration-200"
+      className="group relative rounded-lg overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary transition-all duration-200"
       onClick={onClick}
     >
       {/* Video Preview */}
@@ -267,18 +256,7 @@ function VideoCard({ video, onClick, onDownload, formatDuration, formatFileSize 
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
           <Play className="h-8 w-8 text-white/80" />
         </div>
-        
-        {/* Video Info Overlay */}
-        <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between">
-          <div className="bg-black/70 text-white text-xs px-2 py-1 rounded flex items-center gap-1">
-            <Clock className="h-3 w-3" />
-            {formatDuration(video.duration)}
-          </div>
-          <div className="bg-black/70 text-white text-xs px-2 py-1 rounded">
-            {video.videos.medium.width}x{video.videos.medium.height}
-          </div>
-        </div>
-        
+
         {/* Hover Overlay */}
         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
           <Button
@@ -289,39 +267,6 @@ function VideoCard({ video, onClick, onDownload, formatDuration, formatFileSize 
           >
             <Download className="h-4 w-4" />
           </Button>
-        </div>
-      </div>
-
-      {/* Video Info */}
-      <div className="p-3 space-y-2">
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <User className="h-3 w-3" />
-          <span className="truncate">{video.user}</span>
-        </div>
-        
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1">
-              <Heart className="h-3 w-3" />
-              <span>{video.likes}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Download className="h-3 w-3" />
-              <span>{video.downloads}</span>
-            </div>
-          </div>
-          <div className="text-xs">
-            {formatFileSize(video.videos.medium.size)}
-          </div>
-        </div>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-1">
-          {video.tags.split(", ").slice(0, 2).map((tag) => (
-            <Badge key={tag} variant="secondary" className="text-xs py-0 px-1.5">
-              {tag}
-            </Badge>
-          ))}
         </div>
       </div>
     </div>
