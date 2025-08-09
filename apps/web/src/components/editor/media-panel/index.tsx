@@ -5,6 +5,7 @@ import { MediaView } from "./views/media";
 import { useMediaPanelStore, Tab } from "./store";
 import { TextView } from "./views/text";
 import { SoundsView } from "./views/sounds";
+import { ImagesView } from "./views/images";
 import { Separator } from "@/components/ui/separator";
 import { SettingsView } from "./views/settings";
 
