@@ -17,7 +17,7 @@ export type Tab =
   | "media"
   | "sounds"
   | "text"
-  | "stickers"
+  | "images"
   | "effects"
   | "transitions"
   | "captions"
