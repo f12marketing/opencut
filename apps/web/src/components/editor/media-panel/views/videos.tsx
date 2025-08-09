@@ -201,11 +201,7 @@ export function VideosView() {
             
             {/* Loading Skeletons */}
             {loading && Array.from({ length: 6 }).map((_, i) => (
-              <div key={`skeleton-${i}`} className="space-y-2">
-                <Skeleton className="w-full aspect-video rounded-lg" />
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-3 w-1/2" />
-              </div>
+              <Skeleton key={`skeleton-${i}`} className="w-full aspect-video rounded-lg" />
             ))}
           </div>
 
