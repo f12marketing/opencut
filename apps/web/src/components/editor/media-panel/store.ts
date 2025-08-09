@@ -38,9 +38,9 @@ export const tabs: { [key in Tab]: { icon: LucideIcon; label: string } } = {
     icon: TypeIcon,
     label: "Text",
   },
-  stickers: {
-    icon: StickerIcon,
-    label: "Stickers",
+  images: {
+    icon: ImageIcon,
+    label: "Images",
   },
   effects: {
     icon: SparklesIcon,
