@@ -2,7 +2,7 @@ import {
   CaptionsIcon,
   ArrowLeftRightIcon,
   SparklesIcon,
-  StickerIcon,
+  ImageIcon,
   MusicIcon,
   VideoIcon,
   BlendIcon,
