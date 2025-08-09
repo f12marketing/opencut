@@ -13,6 +13,8 @@ import {
   Music,
   Search,
   Video,
+  Upload,
+  Globe,
 } from "lucide-react";
 import { useEffect, useRef, useState, useMemo } from "react";
 import { toast } from "sonner";
@@ -41,6 +43,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { usePanelStore } from "@/stores/panel-store";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { VideosView } from "./videos";
 
 function MediaItemWithContextMenu({
   item,
