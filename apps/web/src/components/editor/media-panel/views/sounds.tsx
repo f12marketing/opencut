@@ -32,6 +32,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { PixabaySoundEffectsView, PixabayMusicView } from "./pixabay-sounds";
 
 export function SoundsView() {
   return (
@@ -40,7 +41,7 @@ export function SoundsView() {
         <div className="px-3 pt-4 pb-0">
           <TabsList>
             <TabsTrigger value="sound-effects">Sound effects</TabsTrigger>
-            <TabsTrigger value="songs">Songs</TabsTrigger>
+            <TabsTrigger value="songs">Background Music</TabsTrigger>
             <TabsTrigger value="saved">Saved</TabsTrigger>
           </TabsList>
         </div>
@@ -49,7 +50,7 @@ export function SoundsView() {
           value="sound-effects"
           className="p-5 pt-0 mt-0 flex-1 flex flex-col min-h-0"
         >
-          <SoundEffectsView />
+          <PixabaySoundEffectsView />
         </TabsContent>
         <TabsContent
           value="saved"
@@ -416,7 +417,7 @@ function SavedSoundsView() {
 }
 
 function SongsView() {
-  return <div>Songs</div>;
+  return <PixabayMusicView />;
 }
 
 interface AudioItemProps {

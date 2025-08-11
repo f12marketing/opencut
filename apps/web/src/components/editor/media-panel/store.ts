@@ -2,7 +2,7 @@ import {
   CaptionsIcon,
   ArrowLeftRightIcon,
   SparklesIcon,
-  StickerIcon,
+  ImageIcon,
   MusicIcon,
   VideoIcon,
   BlendIcon,
@@ -17,7 +17,7 @@ export type Tab =
   | "media"
   | "sounds"
   | "text"
-  | "stickers"
+  | "images"
   | "effects"
   | "transitions"
   | "captions"
@@ -38,9 +38,9 @@ export const tabs: { [key in Tab]: { icon: LucideIcon; label: string } } = {
     icon: TypeIcon,
     label: "Text",
   },
-  stickers: {
-    icon: StickerIcon,
-    label: "Stickers",
+  images: {
+    icon: ImageIcon,
+    label: "Images",
   },
   effects: {
     icon: SparklesIcon,
