@@ -90,8 +90,13 @@ const apiResponseSchema = z.object({
 
 export async function GET(request: NextRequest) {
   try {
-    const ip = request.headers.get("x-forwarded-for") ?? "anonymous";
-    const { success } = await baseRateLimit.limit(ip);
+    // Choose a more stable rate limit key (prefer client IP from headers; fallback to hashed UA)
+    const forwarded = request.headers.get("x-forwarded-for");
+    const realIp = forwarded?.split(",")[0]?.trim() || request.ip || "unknown";
+    const ua = request.headers.get("user-agent") || "unknown";
+    const rateKey = `${realIp}:${ua.slice(0, 64)}`; // simple namespacing to reduce key collisions
+
+    const { success } = await baseRateLimit.limit(rateKey);
 
     if (!success) {
       return NextResponse.json({ error: "Too many requests" }, { status: 429 });
@@ -106,6 +111,7 @@ export async function GET(request: NextRequest) {
       page_size: searchParams.get("page_size") || undefined,
       sort: searchParams.get("sort") || undefined,
       min_rating: searchParams.get("min_rating") || undefined,
+      commercial_only: searchParams.get("commercial_only") || undefined,
     });
 
     if (!validationResult.success) {
@@ -148,9 +154,17 @@ export async function GET(request: NextRequest) {
         : `${sort}_desc`
       : `${sort}_desc`;
 
+    const apiKey = env.FREESOUND_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: "Freesound API key not configured" },
+        { status: 500 }
+      );
+    }
+
     const params = new URLSearchParams({
       query: query || "",
-      token: env.FREESOUND_API_KEY,
+      token: apiKey,
       page: page.toString(),
       page_size: pageSize.toString(),
       sort: sortParam,
@@ -163,11 +177,11 @@ export async function GET(request: NextRequest) {
       params.append("filter", "duration:[* TO 30.0]");
       params.append("filter", `avg_rating:[${min_rating} TO *]`);
 
-      // Filter by license if commercial_only is true
+      // Filter by license if commercial_only is true: exclude noncommercial-only licenses
       if (commercial_only) {
         params.append(
           "filter",
-          'license:("Attribution" OR "Creative Commons 0" OR "Attribution Noncommercial" OR "Attribution Commercial")'
+          'license:("Attribution" OR "Creative Commons 0" OR "Attribution Commercial")'
         );
       }
 

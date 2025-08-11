@@ -101,23 +101,23 @@ class StorageService {
 
   async loadAllProjects(): Promise<TProject[]> {
     const projectIds = await this.projectsAdapter.list();
-    const projects: TProject[] = [];
 
-    for (const id of projectIds) {
-      const project = await this.loadProject(id);
-      if (project) {
-        projects.push(project);
-      }
-    }
+    // Load all projects in parallel for better performance
+    const projects = (
+      await Promise.all(projectIds.map((id) => this.loadProject(id)))
+    ).filter((p): p is TProject => Boolean(p));
 
     // Sort by last updated (most recent first)
-    return projects.sort(
-      (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
-    );
+    return projects.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
   }
 
   async deleteProject(id: string): Promise<void> {
-    await this.projectsAdapter.remove(id);
+    // Also clear project-specific stores to avoid orphaned data
+    await Promise.all([
+      this.deleteProjectMedia(id),
+      this.deleteProjectTimeline(id),
+      this.projectsAdapter.remove(id),
+    ]);
   }
 
   // Media operations - now project-specific
@@ -177,14 +177,10 @@ class StorageService {
     const { mediaMetadataAdapter } = this.getProjectMediaAdapters(projectId);
 
     const mediaIds = await mediaMetadataAdapter.list();
-    const mediaItems: MediaItem[] = [];
-
-    for (const id of mediaIds) {
-      const item = await this.loadMediaItem(projectId, id);
-      if (item) {
-        mediaItems.push(item);
-      }
-    }
+    // Load all media entries in parallel
+    const mediaItems = (
+      await Promise.all(mediaIds.map((id) => this.loadMediaItem(projectId, id)))
+    ).filter((m): m is MediaItem => Boolean(m));
 
     return mediaItems;
   }
@@ -236,9 +232,18 @@ class StorageService {
   // Utility methods
   async clearAllData(): Promise<void> {
     // Clear all projects
-    await this.projectsAdapter.clear();
+    const projectIds = await this.projectsAdapter.list();
 
-    // Note: Project-specific media and timelines will be cleaned up when projects are deleted
+    // Clear project-specific data for each project in parallel
+    await Promise.all(
+      projectIds.map((id) =>
+        Promise.all([
+          this.deleteProjectMedia(id),
+          this.deleteProjectTimeline(id),
+          this.projectsAdapter.remove(id),
+        ])
+      )
+    );
   }
 
   async getStorageInfo(): Promise<{
@@ -362,7 +367,7 @@ class StorageService {
   }
 
   isIndexedDBSupported(): boolean {
-    return "indexedDB" in window;
+    return typeof window !== "undefined" && "indexedDB" in window;
   }
 
   isFullySupported(): boolean {

@@ -34,11 +34,18 @@ export const auth = betterAuth({
     storage: "secondary-storage",
     customStorage: {
       get: async (key) => {
-        const value = await redis.get(key);
-        return value as RateLimit | undefined;
+        const value = await redis.get<string>(key);
+        if (!value) return undefined;
+        try {
+          return JSON.parse(value) as RateLimit;
+        } catch {
+          return undefined;
+        }
       },
       set: async (key, value) => {
-        await redis.set(key, value);
+        // Store with TTL to avoid unbounded growth; default to 1 hour expiry
+        const ttlSeconds = 60 * 60;
+        await redis.set(key, JSON.stringify(value), { ex: ttlSeconds });
       },
     },
   },
